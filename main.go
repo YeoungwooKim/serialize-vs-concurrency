@@ -13,11 +13,7 @@ func main() {
 	plainPws := func() [][]byte {
 		var plainPws [][]byte
 		for alphabet := ' '; alphabet <= 'z'; alphabet++ {
-			var sentense string
-			for i := 0; i < 3; i++ {
-				sentense = string(alphabet) + string(alphabet) + string(alphabet)
-			}
-			plainPws = append(plainPws, []byte(sentense))
+			plainPws = append(plainPws, []byte(string(alphabet)+string(alphabet)+string(alphabet)))
 		}
 		return plainPws
 	}()
@@ -34,12 +30,12 @@ func main() {
 		return
 	}
 	result := fmt.Sprintf("using Serialize - total %v, excuted time %v", len(plainPws), time.Since(startTime))
-	fmt.Println("----------------------------")
+	fmt.Println("--------------------------------------------------------")
 
 	startTime = time.Now()
 	ch := make(chan bool)
 	// 동시성 처리를 위한 데이터 구조 변경.
-	dividedPlainPw := getDividedPlainPws(plainPws)
+	dividedPlainPw := getDividedPlainPws(2, plainPws)
 	var total [][]byte
 
 	for i := 0; i < len(dividedPlainPw); i++ {
@@ -96,10 +92,9 @@ func validateEncryptedPw(plainPws [][]byte, encryptedPws [][]byte) error {
 }
 
 // 평문 바이트 배열을 임의로 선정한 변수(jobLength)에 따라 데이터 구조 변경하는 함수
-// jobLength의 경우 하드코딩되어 있음.
-func getDividedPlainPws(plainPws [][]byte) [][][]byte {
-	jobLength := 2
+func getDividedPlainPws(jobLength int, plainPws [][]byte) [][][]byte {
 	var dividedPlainPw [][][]byte
+	// 나머지값 존재시 에러 방지.
 	for i := 0; i <= int(math.Ceil(float64(len(plainPws)/jobLength))); i++ {
 		startIdx, endIdx := i*jobLength, i*jobLength+jobLength
 		idx := -1
