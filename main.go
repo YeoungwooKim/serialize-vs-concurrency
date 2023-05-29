@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// 암호화되지 않은 바이트 배열 생성111.
+	// 암호화되지 않은 바이트 배열 생성1112222.
 	plainPws := func() [][]byte {
 		var plainPws [][]byte
 		for alphabet := ' '; alphabet <= 'z'; alphabet++ {
